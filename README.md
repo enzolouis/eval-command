@@ -1,6 +1,6 @@
 # eval-command
 
-<li>**English**</li>
+<li>English</li>
 
 eval-command is a simple project with no more than 2 or 3 files.
 
