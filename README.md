@@ -18,6 +18,6 @@ We use it to test our other commands quickly*
 
 `return` is not always useful with eval command, so if you return something, you will have a description oh the object you return : object representation, type, lenght, dir (method associated with the objet)
 
-Eventually, a single message is sent, with the output (like print, or error), and the return object description if not null. If this message exceeds 2000 characters (discord limit), the whole message is sent to http://bin.lazor.be/ and response sent to you.
+Eventually, a single message is sent, with the output (like print, or error), and the return object description if not null. If this message exceeds 2000 characters (discord limit), the whole message is sent to http://bin.drlazor.be/ and response sent to you.
 
 After this message, one :boom: reaction appears, if you click on, it will be deleted for more visibility.
