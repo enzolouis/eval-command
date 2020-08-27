@@ -34,7 +34,7 @@ class Eval(commands.Cog):
             return author == ctx.author and str(react.emoji) == "\N{COLLISION SYMBOL}" and react.message.id == msg.id
         
         try:
-            react = await self.bot.wait_for("reaction_add", check=check, timeout=60)
+            await self.bot.wait_for("reaction_add", check=check, timeout=60)
         except asyncio.TimeoutError:
             await msg.clear_reactions()
         else:
