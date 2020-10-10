@@ -1,14 +1,12 @@
 # eval-command
 
-<li>English</li>
-
 eval-command is a simple project with no more than 2 or 3 files.
 
 This project use python with discord.py for an eval bot command.
 
 > What's an eval command ?
 
-*It's a command to execute code directly on discord, you could just run simple instruction, or more, asynchronous instructions like create a channel in a guild, ban user, ...
+*It's an OWNER command to execute code directly on discord, you could just run simple instruction, or more, asynchronous instructions like create a channel in a guild, ban user, ...
 We use it to test our other commands quickly*
 
 `[PREFIX]eval code`
