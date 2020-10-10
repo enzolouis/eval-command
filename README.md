@@ -7,7 +7,9 @@ This project use python with discord.py for an eval bot command.
 > What's an eval command ?
 
 *It's an OWNER command to execute code directly on discord, you could just run simple instruction, or more, asynchronous instructions like create a channel in a guild, ban user, ...
-We use it to test our other commands quickly*
+We use it to test our other commands quickly,
+Make sure you know what you do before using this command. It's not like using <a href="http://tio.run">Tio.run</a>, that's to use for only OWNER with precautions, with tio.run,
+we can't access to context discord command, no built-in module, ...
 
 `[PREFIX]eval code`
 
