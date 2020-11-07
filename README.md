@@ -1,10 +1,6 @@
 # eval-command
 
-<<<<<<< HEAD
 eval-command is a simple project with no more than 3 files.
-=======
-eval-command is a simple project with no more than 2 or 3 files.
->>>>>>> 54eb4257e403d52e5b4bbb5d71883f7dcfa1a259
 
 This project use python with discord.py for an eval bot command.
 
