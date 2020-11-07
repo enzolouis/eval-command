@@ -125,11 +125,12 @@ class Eval(commands.Cog):
             await ctx.message.add_reaction(tick)
         else:
             async with aiohttp.ClientSession() as session:
-                async with session.post("https://bin.drlazor.be/", data={"val":to_send}) as response:
+                async with session.post("https://hastebin.com/documents", data=to_send) as response:
                     if response.status == 200: # 200 : check
-                        msg = await ctx.send(f"<{response.url}>")
+                        code = (await response.json())["key"]
+                        msg = await ctx.send(f":white_check_mark: <https://hastebin.com/{code}>")
                     else:
-                        return await ctx.send("Problem with <http://bin.drlazor.be>...")
+                        return await ctx.send("Problem with <https://hastebin.com/>...")
         
         await self.wait_until_react(ctx, msg)
 
