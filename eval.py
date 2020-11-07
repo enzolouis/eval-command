@@ -10,7 +10,7 @@ from contextlib import redirect_stdout
 from discord.ext import commands
 
 PREFIXES = ["/"] # you can specify more prefixes.
-TOKEN = ""
+TOKEN = "" # bot's token
 
 bot = commands.Bot(command_prefix=PREFIXES)
 
@@ -26,11 +26,16 @@ class Eval(commands.Cog):
 
     @staticmethod
     def py(text:str) -> str:
-        """ Format text to a python markdown """
+        """
+        Format text to a python markdown
+        """
         return f"```py\n{text}\n```"
 
-    async def wait_until_react(self, ctx, msg) -> None:
-        """ Add reaction :boom: to the return value, if the author click on, the return will be deleted """
+    async def wait_until_react(self, ctx, msg:discord.Message) -> None:
+        """
+        Add reaction :boom: to the return value, if the author click on, the return will
+        be deleted
+        """
         await msg.add_reaction("\N{COLLISION SYMBOL}")
 
         def check(react, author):
@@ -68,7 +73,7 @@ class Eval(commands.Cog):
 
         buffer = io.StringIO()
 
-        # create asynchronous fonction environment to execute await instruction.
+        # create asynchronous function environment to execute await instruction.
         async_code = f"async def func():\n{indent(code, '    ')}"
         # using textwrap :
         # async def func():
@@ -82,9 +87,9 @@ class Eval(commands.Cog):
 
         try:
             with redirect_stdout(buffer): # OPTIONNAL IN A LOT OF CODE CASE | redirect only stdout and don't send in console, only in discord
-                exec(async_code, env) # exec async code with env, in order to have an acces  to variable like ctx, bot, ... (see `env` var)
+                exec(async_code, env) # exec async code with env, in order to have an access to variable like ctx, bot, ... (see `env` var)
 
-        except Exception as e: # catch invalid syntax
+        except Exception as e: # here catch invalid syntax (not runtime error)
             msg = await ctx.send(py(f"{e.__class__.__name__}: {e}"))
             await ctx.message.add_reaction(error)
             return await self.wait_until_react(ctx, msg) # even if error happen, :boom: react must be here
@@ -92,7 +97,7 @@ class Eval(commands.Cog):
         func = env['func'] # get func from env. func is in env at this line : exec(code, env)
         try:
             with redirect_stdout(buffer): # redirect only stdout and don't send in console, only in discord
-                return_ = await func()
+                return_ = await func() # here catch runtime error
         except Exception as e:
             value = buffer.getvalue()
             msg = await ctx.send(py(f"{value}{traceback.format_exc()}")) # traceback.format_exc to retrace context exception
