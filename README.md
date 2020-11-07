@@ -1,8 +1,6 @@
 # eval-command
 
-<li>English</li>
-
-eval-command is a simple project with no more than 2 or 3 files.
+eval-command is a simple project with no more than 3 files.
 
 This project use python with discord.py for an eval bot command.
 
@@ -21,3 +19,13 @@ We use it to test our other commands quickly*
 Eventually, a single message is sent, with the output (like print, or error), and the return object description if not null. If this message exceeds 2000 characters (discord limit), the whole message is sent to http://bin.drlazor.be/ and response sent to you.
 
 After this message, one :boom: reaction appears, if you click on, it will be deleted for more visibility.
+
+If you want to use this, you just need to install all the requirements in `requirements.txt` by using :
+```
+pip install -U -r requirements.txt
+```
+
+If not work, use `py -m pip` instead `pip`.
+You have only `discord.py` and `aiohttp`, other modules are built-in python module.
+
+In eval.py you just have to define `PREFIXES` with your prefix(es) and `TOKEN` with your bot token at the top of file

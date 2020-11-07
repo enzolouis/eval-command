@@ -9,7 +9,10 @@ from textwrap import indent
 from contextlib import redirect_stdout
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix=["/", "."]) # your prefixes
+PREFIXES = ["/"] # you can specify more prefixes.
+TOKEN = ""
+
+bot = commands.Bot(command_prefix=PREFIXES)
 
 
 class Eval(commands.Cog):
@@ -22,11 +25,11 @@ class Eval(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    def py(text):
+    def py(text:str) -> str:
         """ Format text to a python markdown """
         return f"```py\n{text}\n```"
 
-    async def wait_until_react(self, ctx, msg):
+    async def wait_until_react(self, ctx, msg) -> None:
         """ Add reaction :boom: to the return value, if the author click on, the return will be deleted """
         await msg.add_reaction("\N{COLLISION SYMBOL}")
 
@@ -41,11 +44,16 @@ class Eval(commands.Cog):
             await msg.delete()
 
     @commands.command(name="eval")
-    async def _eval(self, ctx, *, code): # _eval to don't bloc eval() builtin function
-        "Try your python codes directly on discord"
+    async def eval_(self, ctx, *, code):
+        """
+        Try your python codes directly on discord
+        `eval_` name to don't bloc `eval` builtin function
+        If her name was `eval`, no consequence happen in !eval <code>... 
+        but errors can happen in other code in that file
+        """
         # :white_check_mark: and :x: in discord
-        tick = "\N{WHITE HEAVY CHECK MARK}" # unicode : "\u2049"
-        error = "\N{CROSS MARK}" # unicode : "\u2705"
+        tick = "\N{WHITE HEAVY CHECK MARK}"
+        error = "\N{CROSS MARK}"
 
         py = Eval.py # quickly
 
@@ -58,13 +66,9 @@ class Eval(commands.Cog):
             "bot":self.bot,
         }
 
-        env.update(globals()) # push `env` dictionnary to the globals() builtin dictionnary
-
-
-
         buffer = io.StringIO()
 
-        # create asynchrnous fonction environment to execute await instruction.
+        # create asynchronous fonction environment to execute await instruction.
         async_code = f"async def func():\n{indent(code, '    ')}"
         # using textwrap :
         # async def func():
@@ -77,7 +81,7 @@ class Eval(commands.Cog):
         # INVALID SYNTAX
 
         try:
-            with redirect_stdout(buffer): # SURELY OPTIONNAL BUT SAFE | redirect only stdout and don't send in console, only in discord
+            with redirect_stdout(buffer): # OPTIONNAL IN A LOT OF CODE CASE | redirect only stdout and don't send in console, only in discord
                 exec(async_code, env) # exec async code with env, in order to have an acces  to variable like ctx, bot, ... (see `env` var)
 
         except Exception as e: # catch invalid syntax
@@ -108,10 +112,10 @@ class Eval(commands.Cog):
             to_send = value
         if return_ is not None:
 
-            to_send = to_send + f"\n\n<Return>\n{return_}\nlenght:{len(return_) if isinstance(return_, typing.Sequence) else len(str(return_))}\n\n<Return type>\n{return_.__class__.__name__}\n\n<Return dir>\n{dir(return_)}"
+            to_send = to_send + f"\n\n<Return>\n{return_}\n<Return type>\n{return_.__class__.__name__}\n\n<Return dir>\n{dir(return_)}"
         
 
-        if len(to_send) < 1980:
+        if len(to_send) < 1980: # 2000 -> discord messages length limit
             msg = await ctx.send(py(to_send))
             await ctx.message.add_reaction(tick)
         else:
@@ -124,20 +128,16 @@ class Eval(commands.Cog):
         
         await self.wait_until_react(ctx, msg)
 
-
-
-
-
 class TokenError(Exception):
-    def __init__(self, desc):
-        self.your_token = "https://discordapp.com/developers/applications/YOUR_BOT_ID/bot"
+    pass
 
 if __name__ == "__main__":
     bot.add_cog(Eval(bot))
     try:
-        bot.run("token") # replace with your bot token
+        bot.run(TOKEN)
     except Exception as e:
-        e = getattr(e, "original", e)
+        e = getattr(e, "original", e) # discord.py exception handler system..
         if isinstance(e, discord.errors.LoginFailure):
-            raise TokenError(f"{e.__class__.__name__} - https://discordapp.com/developers/applications/YOUR_BOT_ID/bot \
-             to find your bot token.") from None
+            # e.__class__ -> first `type` function form. But type(e).__name__ is not explicit
+            raise TokenError(f"{e.__class__.__name__} - Your token can be the problem cause -> https://discordapp.com/developers/applications/YOUR_BOT_ID/bot \
+             to find your bot token.") from e # not from None cause user can think token is the only one problem
