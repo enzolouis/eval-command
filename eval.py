@@ -1,6 +1,7 @@
 import typing
 import asyncio
 import io
+import re
 import traceback
 import aiohttp
 import discord
@@ -56,6 +57,13 @@ class Eval(commands.Cog):
         If her name was `eval`, no consequence happen in !eval <code>... 
         but errors can happen in other code in that file
         """
+        
+        # get only code without highlighter and code block
+        code_block = code.strip('`')
+        first_line = code_block.splitlines()[0]
+        if re.fullmatch(r'( |[0-9A-z]*)\b', first_line):
+            code = code_block[len(first_line)+1:]
+        
         # :white_check_mark: and :x: in discord
         tick = "\N{WHITE HEAVY CHECK MARK}"
         error = "\N{CROSS MARK}"
