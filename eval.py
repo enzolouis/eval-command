@@ -62,7 +62,7 @@ class Eval(commands.Cog):
         code_block = code.strip('`')
         first_line = code_block.splitlines()[0]
 
-	code = code_block
+        code = code_block
         if re.fullmatch(r'( |[0-9A-z]*)\b', first_line):
             code = code_block[len(first_line)+1:]
         
